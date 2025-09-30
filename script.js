@@ -1,54 +1,43 @@
+let username = document.getElementById("username");
+let password = document.getElementById("password");
+let checkbox = document.getElementById("checkbox");
+let submitButton = document.getElementById("submit");
+let existingUserButton = document.getElementById("existing");
 
-// script.js
 
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const checkbox = document.getElementById("checkbox");
-const existingBtn = document.getElementById("existing");
+let userObj = JSON.parse(localStorage.getItem("user")) || [];
 
-// Show existing user button if credentials exist
-window.onload = () => {
-  const savedUser = localStorage.getItem("username");
-  const savedPass = localStorage.getItem("password");
-  if (savedUser && savedPass) {
-    existingBtn.style.display = "inline-block";
-  }
-};
+if (userObj.length > 0) {
+    existingUserButton.style.display = "block"
+}
 
-// Handle form submit
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  const username = usernameInput.value.trim();
-  const password = passwordInput.value.trim();
+function userLogin() {
+    if (username.value === "" || password.value == "") {
+        console.log("enter both fields")
+        return
+    }
+    if (checkbox.checked) {
+        let obj = {
+            userName: username.value,
+            password: password.value
+        }
+        userObj.push(obj);
+        localStorage.setItem("user", JSON.stringify(userObj))
+        username.value = ""
+        password.value = ""
+    }
+    else if(!checkbox.checked) {
+        alert(`Logged in as ${username.value}`);
+        username.value="";
+        password.value="";
+    }
 
-  if (!username || !password) {
-    alert("Please enter username and password");
-    return;
-  }
 
-  alert(`Logged in as ${username}`);
+    console.log(checkbox.checked)
+}
 
-  if (checkbox.checked) {
-    localStorage.setItem("username", username);
-    localStorage.setItem("password", password);
-  } else {
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
-  }
-
-  // Toggle existing user button
-  if (localStorage.getItem("username")) {
-    existingBtn.style.display = "inline-block";
-  } else {
-    existingBtn.style.display = "none";
-  }
-});
-
-// Handle existing user login
-existingBtn.addEventListener("click", () => {
-  const savedUser = localStorage.getItem("username");
-  if (savedUser) {
-    alert(`Logged in as ${savedUser}`);
-  }
-});
-
+function existingUser(){
+    alert(`Logged in as saved ${userObj[userObj.length-1].userName}`)
+}
+submitButton.addEventListener("click", userLogin)
+existingUserButton.addEventListener("click",existingUser)
