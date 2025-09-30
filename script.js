@@ -1,5 +1,4 @@
-//your JS code here. If required.
-```javascript
+
 // script.js
 
 const usernameInput = document.getElementById("username");
@@ -52,5 +51,4 @@ existingBtn.addEventListener("click", () => {
     alert(`Logged in as ${savedUser}`);
   }
 });
-```
 
